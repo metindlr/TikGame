@@ -171,7 +171,8 @@ $('lgB').onclick=()=>{buildLangs();$('lg').style.display='flex'};$('lgX').onclic
 /* ===== Oyun ===== */
 const $score=$('score'),$menu=$('menu'),$over=$('over'),$mute=$('mute'),$ovS=$('ovScore'),$ovT=$('ovTitle');
 let W,H,dpr,BASEW,BH=36,D=10;
-function resize(){dpr=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);BASEW=Math.min(W*.6,250)}
+var booted=false;
+function resize(){dpr=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);BASEW=Math.max(Math.min(W*.6,250),140);if(booted&&state==='ready')reset()}
 addEventListener('resize',resize);resize();
 let best=+store.get('tk-best')||0,muted=store.get('tk-mute')==='1',ovNew=false;
 $mute.textContent=muted?'🔇':'🔊';
@@ -262,7 +263,7 @@ const baseY=()=>H-120+cam;
 function burst(x,y,hu,n,sp){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=Math.random()*sp+1;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-sp*.4,life:1,h:hu,r:Math.random()*3+1.5})}}
 function drop(){
   if(state==='over')return;
-  if(state==='ready'){state='play';$menu.style.display='none';$score.style.opacity=1;document.body.classList.add('playing');return}
+  if(state==='ready'){if(Math.abs(stack[0].w-BASEW)>1)reset();state='play';$menu.style.display='none';$score.style.opacity=1;document.body.classList.add('playing');return}
   const top=stack[stack.length-1],n=stack.length;
   const l=Math.max(cur.x,top.x),r=Math.min(cur.x+cur.w,top.x+top.w),ov=r-l;
   if(ov<=0){end();return}
@@ -345,7 +346,7 @@ if(navigator.share){
   $('share').addEventListener('click',()=>navigator.share({title:'Tık Kule',text:t('st').replace('{n}',score)}).catch(()=>{}));
 }
 if(window.AndroidAds&&AndroidAds.exitApp){$('exitB').style.display='inline-block';$('exitB').onclick=()=>{try{AndroidAds.exitApp()}catch(e){}}}
-reset();applyLang();requestAnimationFrame(frame);
+reset();booted=true;applyLang();requestAnimationFrame(frame);
 </script>
 </body>
 </html>
