@@ -13,7 +13,7 @@ body{background:#120d2b;color:var(--ink);font-family:"Trebuchet MS","Segoe UI",s
 canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 #score{position:fixed;top:calc(env(safe-area-inset-top,0px) + 16px);left:0;right:0;text-align:center;font-size:76px;font-weight:900;letter-spacing:-2px;pointer-events:none;text-shadow:0 4px 18px var(--shadow)}
 .ib{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);width:44px;height:44px;border-radius:50%;padding:0;font-size:20px;background:var(--card);color:var(--ink);box-shadow:0 4px 14px var(--shadow);z-index:5}
-#mute{right:14px}#lgB{left:14px}#lbB{left:66px}#dyB{left:118px}#thB{left:170px}
+#mute{right:66px}#seB{right:14px}#lbB{left:14px}#dyB{left:66px}#thB{left:118px}#acB{left:170px}
 #menu{position:fixed;left:0;right:0;top:22%;text-align:center;pointer-events:none}
 #menu h1{margin:0;font-size:56px;font-weight:900;letter-spacing:3px;text-shadow:0 6px 24px var(--shadow)}
 #menu h1 span{color:var(--accent)}
@@ -30,7 +30,7 @@ button.alt{background:transparent;color:var(--ink);box-shadow:none;opacity:.85;m
 .tabs{display:flex;gap:8px;justify-content:center;margin:10px 0}
 .tabs button{padding:8px 18px;font-size:15px;background:transparent;color:var(--ink);box-shadow:none;border:2px solid var(--line)}
 .tabs button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
-#nm{width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:10px 14px;border-radius:14px;border:2px solid var(--line);background:transparent;color:var(--ink);text-align:center;-webkit-user-select:text;user-select:text}
+#nm,#nkIn{width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:10px 14px;border-radius:14px;border:2px solid var(--line);background:transparent;color:var(--ink);text-align:center;-webkit-user-select:text;user-select:text}
 ol{list-style:none;margin:12px 0;padding:0;text-align:start}
 li{display:flex;gap:10px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);font-size:16px}
 li.me{background:rgba(139,92,246,.22);border-radius:10px}
@@ -40,6 +40,9 @@ li .rk{width:26px;opacity:.7;font-weight:800}li .nmv{flex:1;overflow:hidden;text
 .langs button{background:transparent;color:var(--ink);box-shadow:none;border:2px solid var(--line);padding:10px 6px;font-size:16px}
 .langs button.on{border-color:var(--accent);background:rgba(139,92,246,.22)}
 .m{font-size:14px;opacity:.7}
+.rpb{padding:2px 8px;margin:0;font-size:14px;opacity:.5}
+.tg2{display:block;width:100%;margin:8px 0;background:transparent;color:var(--ink);box-shadow:none;border:2px solid var(--line);border-radius:16px;padding:12px 16px;font-size:16px;text-align:start}
+.rm *{animation:none!important;transition:none!important}
 .ms{padding:12px 0;border-bottom:1px solid var(--line);text-align:start}.ms.ok{opacity:.65}
 .bar{height:8px;border-radius:6px;background:var(--line);margin:8px 0 4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent)}
 .rw{font-size:14px;font-weight:800}
@@ -55,17 +58,22 @@ li .rk{width:26px;opacity:.7;font-weight:800}li .nmv{flex:1;overflow:hidden;text
 <body>
 <canvas id="c"></canvas>
 <div id="score">0</div>
-<button class="ib" id="lgB" aria-label="Language">🌐</button>
+<button class="ib" id="seB" aria-label="Settings">⚙️</button>
+<button class="ib" id="acB" aria-label="Achievements">🏅</button>
 <button class="ib" id="lbB" aria-label="Leaderboard">🏆</button>
 <button class="ib" id="dyB" aria-label="Daily">📅</button>
 <button class="ib" id="thB" aria-label="Themes">🎨</button>
 <button class="ib" id="mute" aria-label="Sound">🔊</button>
-<div id="menu"><h1>TIK <span>KULE</span></h1><p id="bestMenu"></p><p id="coinMenu"></p><div class="hint" data-i="h"></div></div>
-<div class="ov" id="over"><div class="box"><h2 id="ovTitle"></h2><div class="big" id="ovScore">0</div><p id="res"></p><button id="again" data-i="a"></button><br><button class="alt" id="lbB2" data-i="bd"></button><br><button class="alt" id="share" data-i="s" style="display:none"></button><br><button class="alt" id="exitB" data-i="ex" style="display:none"></button></div></div>
+<div id="menu"><h1>TIK <span>KULE</span></h1><p id="bestMenu"></p><p id="coinMenu"></p><button class="alt" id="nickB" style="pointer-events:auto"></button><br><button class="alt" id="privB" data-i="pv" style="display:none;pointer-events:auto"></button><div class="hint" data-i="h"></div></div>
+<div class="ov" id="over"><div class="box"><h2 id="ovTitle"></h2><div class="big" id="ovScore">0</div><p id="res"></p><p class="m" id="rank"></p><button id="rewB" style="display:none;background:#f59e0b;margin-bottom:10px" data-i="rw"></button><br><button id="again" data-i="a"></button><br><button class="alt" id="lbB2" data-i="bd"></button><br><button class="alt" id="homeB" data-i="ho"></button><br><button class="alt" id="share" data-i="s" style="display:none"></button><br><button class="alt" id="exitB" data-i="ex" style="display:none"></button></div></div>
 <div class="ov" id="lb"><div class="box"><h2 data-i="bd"></h2><input id="nm" maxlength="14"><div class="tabs"><button id="tG" data-i="g"></button><button id="tL" data-i="l"></button></div><div id="list"></div><button class="alt" id="lbX" data-i="cl"></button></div></div>
 <div class="ov" id="lg"><div class="box"><h2>🌐</h2><div class="langs" id="langs"></div><button class="alt" id="lgX" data-i="cl"></button></div></div>
 <div class="ov" id="dy"><div class="box"><h2 data-i="dm"></h2><div id="dyList"></div><p class="m" data-i="rs"></p><button class="alt" id="dyX" data-i="cl"></button></div></div>
 <div class="ov" id="thp"><div class="box"><h2><span data-i="th"></span> <span id="thCoins"></span></h2><div class="tg" id="thList"></div><button class="alt" id="thX" data-i="cl"></button></div></div>
+<div class="ov" id="nk"><div class="box"><h2 data-i="nn"></h2><input id="nkIn" maxlength="14"><p class="m" id="nkErr"></p><button id="nkS" data-i="sv"></button></div></div>
+<div class="ov" id="se"><div class="box"><h2 data-i="se"></h2><button class="tg2" id="sSnd"></button><button class="tg2" id="sVib"></button><button class="tg2" id="sRm"></button><button class="tg2" id="sCb"></button><button class="tg2" id="sLang"></button><button class="alt" id="seX" data-i="cl"></button></div></div>
+<div class="ov" id="ac"><div class="box"><h2 data-i="ah"></h2><div id="acList"></div><button class="alt" id="acX" data-i="cl"></button></div></div>
+<div class="ov" id="pz" style="background:rgba(0,0,0,.5)"><div class="box"><h2 data-i="ps"></h2></div></div>
 <div id="toast"></div>
 <script>
 /* ===== Ayarlar: küresel puan tablosu için Firebase Realtime Database adresi (README) ===== */
@@ -98,25 +106,64 @@ ru:['Ежедневные задания','Темы','Набери {n} очко�
 ar:['مهام يومية','السمات','اجمع {n} نقطة','نفّذ {n} إسقاطات مثالية','حقق سلسلة مثالية من {n}','محدد','العملات غير كافية','مهام جديدة كل يوم'],
 ja:['デイリーミッション','テーマ','スコア{n}に到達','パーフェクトを{n}回決める','パーフェクトを{n}連続で決める','選択中','コインが足りません','毎日新しいミッション']};
 const EX={en:'Exit game',tr:'Oyunu kapat',es:'Salir del juego',de:'Spiel beenden',fr:'Quitter le jeu',pt:'Sair do jogo',ru:'Выйти из игры',ar:'إغلاق اللعبة',ja:'ゲームを終了'};
-Object.keys(LANGS).forEach(k=>LANGS[k]=LANGS[k].concat(X[k],[EX[k]]));
-const K=['name','h','b','p','o','r','a','s','bd','g','l','nm','em','of','ld','cl','st','dm','th','m1','m2','m3','sel','nc','rs','ex'];
+const X2={
+en:['Home','Choose your nickname','Save','At least 2 characters'],
+tr:['Ana sayfa','Takma adını seç','Kaydet','En az 2 karakter'],
+es:['Inicio','Elige tu apodo','Guardar','Mínimo 2 caracteres'],
+de:['Start','Wähle deinen Spitznamen','Speichern','Mindestens 2 Zeichen'],
+fr:['Accueil','Choisissez votre pseudo','Enregistrer','2 caractères minimum'],
+pt:['Início','Escolha seu apelido','Salvar','Mínimo de 2 caracteres'],
+ru:['Главная','Выбери никнейм','Сохранить','Минимум 2 символа'],
+ar:['الرئيسية','اختر لقبك','حفظ','حرفان على الأقل'],
+ja:['ホーム','ニックネームを決めよう','保存','2文字以上']};
+const X3={
+en:['This name is not allowed','Press back again to exit','Privacy policy','Continue (watch ad)','No ad available right now','World rank','Report','Thanks, reported'],
+tr:['Bu isme izin verilmiyor','Çıkmak için tekrar geri bas','Gizlilik politikası','Devam et (reklam izle)','Şu an reklam yok','Dünya sırası','Bildir','Teşekkürler, bildirildi'],
+es:['Este nombre no está permitido','Pulsa atrás otra vez para salir','Política de privacidad','Continuar (ver anuncio)','No hay anuncios ahora','Puesto mundial','Denunciar','Gracias, denunciado'],
+de:['Dieser Name ist nicht erlaubt','Zum Beenden erneut Zurück drücken','Datenschutz','Weiter (Werbung ansehen)','Gerade keine Werbung verfügbar','Weltrang','Melden','Danke, gemeldet'],
+fr:['Ce nom n’est pas autorisé','Appuyez encore sur retour pour quitter','Politique de confidentialité','Continuer (voir une pub)','Aucune pub disponible','Rang mondial','Signaler','Merci, signalé'],
+pt:['Este nome não é permitido','Toque em voltar de novo para sair','Política de privacidade','Continuar (ver anúncio)','Nenhum anúncio disponível agora','Posição mundial','Denunciar','Obrigado, denunciado'],
+ru:['Это имя запрещено','Нажмите «Назад» ещё раз для выхода','Политика конфиденциальности','Продолжить (смотреть рекламу)','Сейчас нет рекламы','Место в мире','Пожаловаться','Спасибо, жалоба отправлена'],
+ar:['هذا الاسم غير مسموح','اضغط رجوع مرة أخرى للخروج','سياسة الخصوصية','متابعة (شاهد إعلانًا)','لا يوجد إعلان متاح الآن','الترتيب العالمي','إبلاغ','شكرًا، تم الإبلاغ'],
+ja:['この名前は使えません','終了するにはもう一度戻るを押してください','プライバシーポリシー','続ける（広告を見る）','今は広告がありません','世界順位','報告','報告しました']};
+const X4={
+en:['Paused – tap to continue','Settings','Sound','Vibration','Reduce motion','Colorblind mode','Achievements','Play {n} games','Day {n} streak! +{c} coins'],
+tr:['Duraklatıldı – devam etmek için dokun','Ayarlar','Ses','Titreşim','Hareketi azalt','Renk körü modu','Başarımlar','{n} oyun oyna','{n}. gün serisi! +{c} jeton'],
+es:['En pausa – toca para continuar','Ajustes','Sonido','Vibración','Reducir movimiento','Modo daltónico','Logros','Juega {n} partidas','¡Racha de {n} días! +{c} monedas'],
+de:['Pausiert – tippen zum Fortfahren','Einstellungen','Ton','Vibration','Bewegung reduzieren','Farbenblind-Modus','Erfolge','Spiele {n} Partien','{n}-Tage-Serie! +{c} Münzen'],
+fr:['En pause – touchez pour continuer','Réglages','Son','Vibration','Réduire les animations','Mode daltonien','Succès','Jouez {n} parties','Série de {n} jours ! +{c} pièces'],
+pt:['Pausado – toque para continuar','Configurações','Som','Vibração','Reduzir movimento','Modo daltônico','Conquistas','Jogue {n} partidas','Sequência de {n} dias! +{c} moedas'],
+ru:['Пауза – нажми, чтобы продолжить','Настройки','Звук','Вибрация','Меньше движения','Режим для дальтоников','Достижения','Сыграй {n} игр','Серия {n} дн.! +{c} монет'],
+ar:['متوقف مؤقتًا – المس للمتابعة','الإعدادات','الصوت','الاهتزاز','تقليل الحركة','وضع عمى الألوان','الإنجازات','العب {n} مباراة','سلسلة {n} أيام! +{c} عملة'],
+ja:['一時停止中 – タップで再開','設定','サウンド','バイブレーション','動きを減らす','色覚サポート','実績','{n}回プレイ','{n}日連続！ +{c}コイン']};
+Object.keys(LANGS).forEach(k=>LANGS[k]=LANGS[k].concat(X[k],[EX[k]],X2[k],X3[k],X4[k]));
+const K=['name','h','b','p','o','r','a','s','bd','g','l','nm','em','of','ld','cl','st','dm','th','m1','m2','m3','sel','nc','rs','ex','ho','nn','sv','ne','nb','bk','pv','rw','na','rk','rp','rd','ps','se','so','vi','rm','cb','ah','g1','dl'];
 let lang=store.get('tk-lang');
 if(!LANGS[lang]){const p=(navigator.language||'en').slice(0,2).toLowerCase();lang=LANGS[p]?p:'en'}
 const t=k=>LANGS[lang][K.indexOf(k)];
 function applyLang(){
   document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
-  document.querySelectorAll('[data-i]').forEach(e=>{e.textContent=t(e.dataset.i);if(e.id==='lbB2')e.textContent='🏆 '+t('bd')});
-  $('nm').placeholder=t('nm');refreshBest();
+  document.querySelectorAll('[data-i]').forEach(e=>{e.textContent=t(e.dataset.i);if(e.id==='lbB2')e.textContent='🏆 '+t('bd');if(e.id==='homeB')e.textContent='🏠 '+t('ho');if(e.id==='privB')e.textContent='🔒 '+t('pv');if(e.id==='rewB')e.textContent='▶ '+t('rw')});
+  $('nm').placeholder=t('nm');$('nkIn').placeholder=t('nm');refreshBest();if(typeof renderSettings==='function')renderSettings();
 }
-function refreshBest(){$('bestMenu').textContent=best?t('b')+': '+best:'';$('coinMenu').textContent='🪙 '+coins}
+function refreshBest(){$('bestMenu').textContent=best?t('b')+': '+best:'';$('coinMenu').textContent='🪙 '+coins+(streak>1?'   🔥 '+streak:'');$('nickB').textContent='👤 '+pname+' ✏️'}
 
 /* ===== Kimlik, bölge, puan tablosu ===== */
 let uid=store.get('tk-uid');if(!uid){uid=Math.random().toString(36).slice(2,12);store.set('tk-uid',uid)}
+const hadName=!!store.get('tk-name');
 let pname=store.get('tk-name')||('Player'+(1000+Math.floor(Math.random()*9000)));
 const region=((navigator.language||'').split('-')[1]||'').toUpperCase();
+const SUBW=['orospu','yarrak','amcik','pezevenk','siktir','kahpe','sikerim','sikeyim','fuck','shit','bitch','cunt','nigg','faggot','asshole','whore','slut','pendejo','cabron','mierda','scheiss','fotze','arschloch','wichser','merde','putain','connard','salope','encule','caralho','buceta','hitler','блят','хуи','пизд','ебан','ебат','сука'];
+const TOKW=['amk','aq','sik','göt','piç','ibne','dick','cock','porn','sex'];
+function bad(n){
+  const l=String(n).toLowerCase().replace(/[0@]/g,'o').replace(/[1!|]/g,'i').replace(/3/g,'e').replace(/4/g,'a').replace(/[5$]/g,'s').replace(/7/g,'t');
+  const flat=l.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i').replace(/[^\p{L}]/gu,'');
+  if(SUBW.some(w=>flat.includes(w)))return true;
+  return l.split(/[^\p{L}\p{N}]+/u).some(x=>TOKW.includes(x));
+}
 const flag=c=>/^[A-Z]{2}$/.test(c)?String.fromCodePoint(...[...c].map(x=>127397+x.charCodeAt(0))):'🌍';
 const localGet=()=>{try{return JSON.parse(store.get('tk-local'))||[]}catch(e){return[]}};
-function localAdd(s){const a=localGet();a.push({n:pname,s,c:region,t:Date.now()});a.sort((x,y)=>y.s-x.s);store.set('tk-local',JSON.stringify(a.slice(0,10)))}
+function localAdd(s){const a=localGet().filter(x=>x.r!==runId);a.push({n:pname,s,c:region,t:Date.now(),r:runId});a.sort((x,y)=>y.s-x.s);store.set('tk-local',JSON.stringify(a.slice(0,10)))}
 async function globalSubmit(s){
   if(!BOARD_URL)return;
   try{await fetch(BOARD_URL+'/scores/'+uid+'.json',{method:'PUT',body:JSON.stringify({n:pname.slice(0,14),s,c:region,t:Date.now()})})}catch(e){}
@@ -144,16 +191,17 @@ async function renderBoard(){
     const li=document.createElement('li');if(r.id===uid&&r.n===pname.slice(0,14)||r.id===uid&&tab==='global')li.className='me';
     const a=document.createElement('span');a.className='rk';a.textContent=i+1;
     const f=document.createElement('span');f.textContent=flag(r.c);
-    const n=document.createElement('span');n.className='nmv';n.textContent=r.n;
+    const n=document.createElement('span');n.className='nmv';n.textContent=bad(r.n)?'•••':r.n;
     const s=document.createElement('span');s.className='sc';s.textContent=r.s;
-    li.append(a,f,n,s);ol.appendChild(li);
+    li.append(a,f,n,s);if(tab==='global'&&r.id!==uid){const fl=document.createElement('button');fl.className='alt rpb';fl.textContent='⚑';fl.title=t('rp');fl.onclick=()=>report(r.id,fl);li.append(fl)}ol.appendChild(li);
   });
   L.innerHTML='';L.appendChild(ol);
 }
 function openBoard(){$('nm').value=pname;$('lb').style.display='flex';renderBoard()}
 $('tG').onclick=()=>{tab='global';renderBoard()};
 $('tL').onclick=()=>{tab='local';renderBoard()};
-$('nm').addEventListener('input',e=>{const v=e.target.value.trim().slice(0,14);if(v){pname=v;store.set('tk-name',v)}});
+function saveName(v){v=(v||'').trim().slice(0,14);if(v.length<2)return 'short';if(bad(v))return 'bad';pname=v;store.set('tk-name',v);$('nm').value=v;refreshBest();if(best>0)globalSubmit(best);return true}
+$('nm').addEventListener('change',e=>{const r=saveName(e.target.value);if(r!==true){e.target.value=pname;if(r==='bad')toast(t('nb'))}});
 $('lbB').onclick=openBoard;$('lbB2').onclick=openBoard;$('lbX').onclick=()=>$('lb').style.display='none';
 
 /* ===== Dil seçici ===== */
@@ -166,15 +214,15 @@ function buildLangs(){
     LG.appendChild(b);
   });
 }
-$('lgB').onclick=()=>{buildLangs();$('lg').style.display='flex'};$('lgX').onclick=()=>$('lg').style.display='none';
+$('lgX').onclick=()=>$('lg').style.display='none';
 
 /* ===== Oyun ===== */
 const $score=$('score'),$menu=$('menu'),$over=$('over'),$mute=$('mute'),$ovS=$('ovScore'),$ovT=$('ovTitle');
-let W,H,dpr,BASEW,BH=36,D=10;
+let W,H,dpr,BASEW,BH=36,D=10,PF=0,OX=0,SC=1;
 var booted=false;
-function resize(){dpr=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);BASEW=Math.max(Math.min(W*.6,250),140);if(booted&&state==='ready')reset()}
+function resize(){dpr=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);SC=Math.min(1.6,Math.max(.9,Math.min(W,H)/400));BH=Math.round(36*SC);D=Math.round(10*SC);PF=W<=H?W:Math.min(W,Math.max(360,H*.8));OX=(W-PF)/2;BASEW=Math.max(Math.min(PF*.6,250*SC),140);if(booted&&state==='ready')reset()}
 addEventListener('resize',resize);resize();
-let best=+store.get('tk-best')||0,muted=store.get('tk-mute')==='1',ovNew=false;
+let best=+store.get('tk-best')||0,muted=store.get('tk-mute')==='1',ovNew=false,vibOn=store.get('tk-vib')!=='0',rm=store.get('tk-rm')==='1',cb=store.get('tk-cb')==='1';
 $mute.textContent=muted?'🔇':'🔊';
 
 let ac;
@@ -186,7 +234,7 @@ function tone(f,d,type,v,to){
   o.connect(g);g.connect(ac.destination);o.start(x);o.stop(x+d);
 }
 const SCALE=[0,2,4,7,9,12,14,16,19,21];
-const buzz=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+const buzz=p=>{if(!vibOn)return;try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
 
 let stack,cur,debris,parts,pops,score,cam,state,combo,flash,shake,last=0;
 const stars=Array.from({length:50},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.6+.4,p:Math.random()*.25+.05}));
@@ -197,11 +245,11 @@ const THEMES=[
 {id:'ocean',c:150,h:i=>wave(i,165,70),s:75,l:55,bg:208},
 {id:'candy',c:250,h:i=>(i*29+300)%360,s:92,l:68,bg:300},
 {id:'gold',c:400,h:i=>wave(i,34,18),s:88,l:54,bg:262}];
-let coins=+store.get('tk-coins')||0,earned=0,plays=0,owned=[];
+let coins=+store.get('tk-coins')||0,earned=0,plays=0,owned=[],revived=false,paid=0,runId=Date.now(),backAt=0,sessionStart=Date.now(),lastAd=0,rewardedAt=0,streak=0,paused=false;
 try{owned=JSON.parse(store.get('tk-themes'))||[]}catch(e){}
 if(!owned.includes('neon'))owned.push('neon');
 let th=THEMES.find(x=>x.id===store.get('tk-theme')&&owned.includes(x.id))||THEMES[0];
-const hue=i=>th.h(i);
+const hue=i=>cb?(i%2?32:215):th.h(i);
 let tt;function toast(m){const e=$('toast');e.textContent=m;e.style.opacity=1;clearTimeout(tt);tt=setTimeout(()=>e.style.opacity=0,1800)}
 function addCoins(n){coins+=n;store.set('tk-coins',coins);refreshBest()}
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
@@ -249,27 +297,85 @@ function renderThemes(){
 }
 $('dyB').onclick=()=>{renderDaily();$('dy').style.display='flex'};$('dyX').onclick=()=>$('dy').style.display='none';
 $('thB').onclick=()=>{renderThemes();$('thp').style.display='flex'};$('thX').onclick=()=>$('thp').style.display='none';
+
+/* --- başarımlar --- */
+let ach={done:[],games:0,perf:0,bc:0};try{Object.assign(ach,JSON.parse(store.get('tk-ach'))||{})}catch(e){}
+const ACH=[
+{id:'s10',k:'m1',n:10,r:20,v:()=>Math.max(score||0,best)},{id:'s25',k:'m1',n:25,r:40,v:()=>Math.max(score||0,best)},{id:'s50',k:'m1',n:50,r:100,v:()=>Math.max(score||0,best)},
+{id:'c5',k:'m3',n:5,r:30,v:()=>Math.max(combo||0,ach.bc)},{id:'c10',k:'m3',n:10,r:80,v:()=>Math.max(combo||0,ach.bc)},
+{id:'p100',k:'m2',n:100,r:60,v:()=>ach.perf},{id:'g10',k:'g1',n:10,r:30,v:()=>ach.games},{id:'g50',k:'g1',n:50,r:100,v:()=>ach.games}];
+function checkAch(){
+  ach.bc=Math.max(ach.bc||0,combo||0);
+  ACH.forEach(a=>{if(!ach.done.includes(a.id)&&a.v()>=a.n){ach.done.push(a.id);addCoins(a.r);toast('🏅 +'+a.r+' 🪙')}});
+  store.set('tk-ach',JSON.stringify(ach));
+}
+function renderAch(){
+  const L=$('acList');L.innerHTML='';
+  ACH.forEach(a=>{
+    const ok=ach.done.includes(a.id),row=document.createElement('div');row.className='ms'+(ok?' ok':'');
+    const tx=document.createElement('div');tx.textContent=t(a.k).replace('{n}',a.n);
+    const bar=document.createElement('div');bar.className='bar';const f=document.createElement('i');f.style.width=Math.min(100,a.v()/a.n*100)+'%';bar.appendChild(f);
+    const rw=document.createElement('span');rw.className='rw';rw.textContent=(ok?'✓ ':'')+'+'+a.r+' 🪙';
+    row.append(tx,bar,rw);L.appendChild(row);
+  });
+}
+$('acB').onclick=()=>{renderAch();$('ac').style.display='flex'};$('acX').onclick=()=>$('ac').style.display='none';
+
+/* --- günlük giriş serisi --- */
+const dayNum=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5);
+function loginCheck(){
+  let o={d:0,s:0};try{o=JSON.parse(store.get('tk-login'))||o}catch(e){}
+  const d=dayNum();
+  if(o.d===d){streak=o.s;return}
+  o.s=(o.d===d-1)?o.s+1:1;o.d=d;streak=o.s;store.set('tk-login',JSON.stringify(o));
+  const c=5+5*Math.min(o.s,6);addCoins(c);
+  setTimeout(()=>toast(t('dl').replace('{n}',o.s).replace('{c}',c)),700);
+}
+
+/* --- ayarlar --- */
+function renderSettings(){
+  const on=v=>v?'  ✓':'  ✕';
+  $('sSnd').textContent='🔊 '+t('so')+on(!muted);
+  $('sVib').textContent='📳 '+t('vi')+on(vibOn);
+  $('sRm').textContent='🌀 '+t('rm')+on(rm);
+  $('sCb').textContent='👁 '+t('cb')+on(cb);
+  $('sLang').textContent='🌐 '+LANGS[lang][0];
+}
+$('seB').onclick=()=>{renderSettings();$('se').style.display='flex'};$('seX').onclick=()=>$('se').style.display='none';
+$('sSnd').onclick=()=>{muted=!muted;$mute.textContent=muted?'🔇':'🔊';store.set('tk-mute',muted?'1':'0');initAudio();renderSettings()};
+$('sVib').onclick=()=>{vibOn=!vibOn;store.set('tk-vib',vibOn?'1':'0');if(vibOn)buzz(20);renderSettings()};
+$('sRm').onclick=()=>{rm=!rm;store.set('tk-rm',rm?'1':'0');document.body.classList.toggle('rm',rm);renderSettings()};
+$('sCb').onclick=()=>{cb=!cb;store.set('tk-cb',cb?'1':'0');renderSettings();if(state==='ready')reset()};
+$('sLang').onclick=()=>{buildLangs();$('lg').style.display='flex'};
+document.body.classList.toggle('rm',rm);
+
+/* --- duraklatma --- */
+function pauseGame(){if(state==='play'&&!paused){paused=true;$('pz').style.display='flex'}}
+function resumeGame(){paused=false;$('pz').style.display='none'}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseGame()});
+addEventListener('blur',pauseGame);
+$('pz').addEventListener('pointerdown',resumeGame);
 function reset(){
-  stack=[{x:(W-BASEW)/2,w:BASEW,h:hue(0)}];
-  score=0;cam=0;combo=0;debris=[];parts=[];pops=[];flash=0;shake=0;state='ready';document.body.classList.remove('playing');
+  stack=[{x:OX+(PF-BASEW)/2,w:BASEW,h:hue(0)}];
+  score=0;cam=0;combo=0;debris=[];parts=[];pops=[];flash=0;shake=0;state='ready';revived=false;paid=0;runId=Date.now();document.body.classList.remove('playing');
   spawn();$score.textContent=0;refreshBest();
   $menu.style.display='block';$over.style.display='none';$score.style.opacity=0;
 }
 function spawn(){
   const n=stack.length,top=stack[n-1],left=n%2===0;
-  cur={w:top.w,x:left?-top.w:W,dir:left?1:-1,sp:Math.min(2.8+n*.085,7.6),h:hue(n)};
+  cur={w:top.w,x:left?OX-top.w:OX+PF,dir:left?1:-1,sp:Math.min(2.8+n*.085,7.6),h:hue(n)};
 }
-const baseY=()=>H-120+cam;
-function burst(x,y,hu,n,sp){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=Math.random()*sp+1;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-sp*.4,life:1,h:hu,r:Math.random()*3+1.5})}}
+const baseY=()=>H-Math.round(110*SC)+cam;
+function burst(x,y,hu,n,sp){if(rm)return;for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=Math.random()*sp+1;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-sp*.4,life:1,h:hu,r:Math.random()*3+1.5})}}
 function drop(){
-  if(state==='over')return;
+  if(state==='over'||paused)return;
   if(state==='ready'){if(Math.abs(stack[0].w-BASEW)>1)reset();state='play';$menu.style.display='none';$score.style.opacity=1;document.body.classList.add('playing');return}
   const top=stack[stack.length-1],n=stack.length;
   const l=Math.max(cur.x,top.x),r=Math.min(cur.x+cur.w,top.x+top.w),ov=r-l;
   if(ov<=0){end();return}
   const diff=Math.abs(cur.x-top.x),ty=baseY()-n*BH;
   if(diff<7){
-    combo++;flash=1;progress(1,1,true);progress(2,combo);
+    combo++;flash=rm?0:1;progress(1,1,true);progress(2,combo);ach.perf++;checkAch();
     const w=Math.min(top.w+(combo>2?7:0),BASEW);
     stack.push({x:top.x-(w-top.w)/2,w,h:cur.h});
     burst(top.x+top.w/2,ty,cur.h,14+combo*3,5);
@@ -281,33 +387,34 @@ function drop(){
     stack.push({x:l,w:ov,h:cur.h});
     burst(cutL?l:r,ty+BH/2,cur.h,6,3);tone(170,.14,'triangle',.28,80);buzz(8);
   }
-  score++;progress(0,score);$score.textContent=score;spawn();
+  score++;progress(0,score);checkAch();$score.textContent=score;spawn();
 }
 function end(){
-  state='over';combo=0;shake=16;document.body.classList.remove('playing');
+  state='over';combo=0;shake=rm?0:16;document.body.classList.remove('playing');if(!revived)ach.games++;checkAch();
   debris.push({x:cur.x,w:cur.w,wy:-stack.length*BH,vy:0,h:cur.h});
-  ovNew=score>best&&score>0;earned=Math.floor(score/5);if(earned)addCoins(earned);
+  ovNew=score>best&&score>0;earned=Math.floor(score/5)-paid;if(earned>0){paid+=earned;addCoins(earned)}else earned=0;
   if(score>0)localAdd(score);
   if(ovNew){best=score;store.set('tk-best',best);globalSubmit(score);burst(W/2,H/2,hue(score),40,8)}
   tone(220,.5,'sawtooth',.18,50);buzz([30,40,40]);
   setTimeout(()=>{
-    $ovT.textContent=ovNew?t('r'):t('o');$ovS.textContent=score;$('res').textContent=t('b')+': '+best+(earned?'   +'+earned+' 🪙':'');$over.style.display='flex';$score.style.opacity=0;
+    $ovT.textContent=ovNew?t('r'):t('o');$ovS.textContent=score;$('res').textContent=t('b')+': '+best+(earned?'   +'+earned+' 🪙':'');$over.style.display='flex';$score.style.opacity=0;$('rewB').style.display=(window.AndroidAds&&AndroidAds.showRewarded&&!revived&&score>=1)?'inline-block':'none';$('rank').textContent='';myRank();
+    if(ovNew&&best>=15&&plays>=2&&!store.get('tk-rev')&&window.AndroidAds&&AndroidAds.requestReview){store.set('tk-rev','1');setTimeout(()=>{try{AndroidAds.requestReview()}catch(e){}},1200)}
     if(ovNew){tone(660,.4,'sine',.2);setTimeout(()=>tone(880,.5,'sine',.2),150)}
   },750);
 }
 function drawBlock(x,y,w,hu,a){
   ctx.globalAlpha=a==null?1:a;
-  ctx.fillStyle='hsl('+hu+','+th.s+'%,'+th.l+'%)';ctx.fillRect(x,y,w,BH);
+  ctx.fillStyle='hsl('+hu+','+th.s+'%,'+th.l+'%)';ctx.fillRect(x,y,w,BH);if(cb){ctx.fillStyle='rgba(0,0,0,.28)';for(let sx=x+4;sx<x+w-2;sx+=14)ctx.fillRect(sx,y,5,BH)}
   ctx.fillStyle='hsl('+hu+','+Math.min(95,th.s+7)+'%,'+Math.min(90,th.l+16)+'%)';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+D,y-D);ctx.lineTo(x+w+D,y-D);ctx.lineTo(x+w,y);ctx.fill();
   ctx.fillStyle='hsl('+hu+','+(th.s-8)+'%,'+(th.l-18)+'%)';ctx.beginPath();ctx.moveTo(x+w,y);ctx.lineTo(x+w+D,y-D);ctx.lineTo(x+w+D,y+BH-D);ctx.lineTo(x+w,y+BH);ctx.fill();
   ctx.globalAlpha=1;
 }
 function update(dt){
-  if(state==='play'||state==='ready'){
+  if((state==='play'||state==='ready')&&!paused){
     cur.x+=cur.dir*cur.sp*dt*(state==='ready'?.6:1);
-    if(cur.x+cur.w>W+40)cur.dir=-1;if(cur.x<-40)cur.dir=1;
+    if(cur.x+cur.w>OX+PF+40)cur.dir=-1;if(cur.x<OX-40)cur.dir=1;
   }
-  const target=Math.max(0,(stack.length-6)*BH);cam+=(target-cam)*.1*dt;
+  const vis=Math.max(3,Math.min(8,Math.floor(H*.35/BH)));const target=Math.max(0,(stack.length-vis)*BH);cam+=(target-cam)*.1*dt;
   debris.forEach(d=>{d.vy+=.6*dt;d.wy+=d.vy*dt});debris=debris.filter(d=>baseY()+d.wy<H+60);
   parts.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=.25*dt;p.life-=.022*dt});parts=parts.filter(p=>p.life>0);
   pops.forEach(p=>p.life-=.016*dt);pops=pops.filter(p=>p.life>0);
@@ -320,7 +427,7 @@ function draw(){
   ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
   ctx.fillStyle=isDark?'#fff':'#5b3fd0';
   stars.forEach(s=>{const y=((s.y*H+cam*s.p)%H+H)%H;ctx.globalAlpha=.25+s.r*.2;ctx.beginPath();ctx.arc(s.x*W,y,s.r,0,6.3);ctx.fill()});
-  ctx.globalAlpha=1;ctx.save();
+  ctx.globalAlpha=1;ctx.save();if(PF<W){ctx.beginPath();ctx.rect(OX,0,PF,H);ctx.clip()}
   if(shake>.3)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
   stack.forEach((b,i)=>drawBlock(b.x,baseY()-i*BH,b.w,b.h));
   if(state!=='over')drawBlock(cur.x,baseY()-stack.length*BH,cur.w,cur.h);
@@ -339,14 +446,41 @@ function frame(ts){const dt=Math.min((ts-last)/16.67||1,2.5);last=ts;update(dt);
 
 addEventListener('pointerdown',e=>{if(e.target.closest('button,input,.ov'))return;initAudio();drop()});
 addEventListener('keydown',e=>{if(e.code==='Space'&&document.activeElement.tagName!=='INPUT'){e.preventDefault();initAudio();drop()}});
-$('again').addEventListener('click',()=>{initAudio();if(++plays%3===0&&window.AndroidAds){try{AndroidAds.showInterstitial()}catch(e){}}reset()});
-$mute.addEventListener('click',()=>{muted=!muted;$mute.textContent=muted?'🔇':'🔊';store.set('tk-mute',muted?'1':'0');initAudio()});
+function afterOver(){plays++;const n=Date.now();if(window.AndroidAds&&plays%3===0&&n-sessionStart>12e4&&n-lastAd>18e4&&n-rewardedAt>18e4){try{AndroidAds.showInterstitial();lastAd=n}catch(e){}}reset()}
+$('again').addEventListener('click',()=>{initAudio();afterOver();state='play';$menu.style.display='none';$score.style.opacity=1;document.body.classList.add('playing')});
+$('homeB').addEventListener('click',()=>{initAudio();afterOver()});
+$mute.addEventListener('click',()=>{muted=!muted;$mute.textContent=muted?'🔇':'🔊';store.set('tk-mute',muted?'1':'0');initAudio();renderSettings()});
 if(navigator.share){
   $('share').style.display='inline-block';
   $('share').addEventListener('click',()=>navigator.share({title:'Tık Kule',text:t('st').replace('{n}',score)}).catch(()=>{}));
 }
 if(window.AndroidAds&&AndroidAds.exitApp){$('exitB').style.display='inline-block';$('exitB').onclick=()=>{try{AndroidAds.exitApp()}catch(e){}}}
-reset();booted=true;applyLang();requestAnimationFrame(frame);
+function openNick(){$('nkIn').value=pname;$('nkErr').textContent='';$('nk').style.display='flex';setTimeout(()=>{$('nkIn').focus();$('nkIn').select()},60)}
+$('nickB').onclick=openNick;
+async function myRank(){
+  if(!BOARD_URL||!best)return;
+  try{const r=await fetch(BOARD_URL+'/scores.json?orderBy="s"&startAt='+(best+1)+'&limitToFirst=1000');const o=(await r.json())||{};const n=Object.keys(o).length;$('rank').textContent='🌍 '+t('rk')+': #'+(n>=1000?'1000+':n+1)}catch(e){}
+}
+async function report(id,btn){
+  try{await fetch(BOARD_URL+'/reports/'+encodeURIComponent(id)+'/'+uid+'.json',{method:'PUT',body:String(Date.now())});btn.disabled=true;btn.textContent='✓';toast(t('rd'))}catch(e){toast(t('of'))}
+}
+function revive(){revived=true;$over.style.display='none';state='play';combo=0;shake=0;spawn();$score.style.opacity=1;document.body.classList.add('playing')}
+window.onRewarded=()=>{if(state==='over'){rewardedAt=Date.now();revive()}};
+window.onRewardFail=()=>toast(t('na'));
+$('rewB').onclick=()=>{try{AndroidAds.showRewarded()}catch(e){toast(t('na'))}};
+window.__back=function(){
+  if(paused){resumeGame();return true}
+  for(const id of ['se','ac','thp','dy','lg','lb','nk']){const e=$(id);if(e&&e.style.display==='flex'){if(id==='nk'&&!store.get('tk-name'))return true;e.style.display='none';return true}}
+  if(state==='over'){afterOver();return true}
+  if(Date.now()-backAt<2000)return false;
+  backAt=Date.now();toast(t('bk'));return true;
+};
+if(window.AndroidAds){$('privB').style.display='inline-block';$('privB').onclick=()=>{location.href='privacy.html'}}
+$('nkS').onclick=()=>{const r=saveName($('nkIn').value);if(r===true)$('nk').style.display='none';else $('nkErr').textContent=t(r==='bad'?'nb':'ne')};
+$('nkIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('nkS').click()});
+loginCheck();
+if(best>0&&BOARD_URL)setTimeout(()=>globalSubmit(best),2500);
+reset();booted=true;applyLang();if(!hadName)openNick();requestAnimationFrame(frame);
 </script>
 </body>
 </html>

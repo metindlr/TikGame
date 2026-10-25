@@ -4,9 +4,11 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
     <application
-        android:icon="@drawable/ic_launcher"
-        android:label="Tık Kule"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="TIK Kule"
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
         <!-- TEST uygulama kimliği: yayından önce kendi AdMob uygulama kimliğinle değiştir -->
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-3940256099942544~3347511713"/>

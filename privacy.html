@@ -27,9 +27,11 @@ section{border-top:1px solid var(--line);margin-top:34px;padding-top:6px}
 <h2>Cihazda saklanan veriler</h2>
 <p>En yüksek skorun, cihazdaki ilk 10 skor listesi, seçtiğin oyuncu adı, dil ve ses ayarı ile rastgele oluşturulmuş anonim bir kimlik numarası yalnızca cihazında saklanır. Uygulamayı silerek veya uygulama verilerini temizleyerek bunları kaldırabilirsin.</p>
 <h2>Çevrim içi puan tablosu</h2>
-<p>Çevrim içi (dünya) puan tablosu etkinse ve yeni bir rekor kırarsan şu bilgiler Google Firebase Realtime Database üzerinde çalışan sunucumuza gönderilir: oyuncu adın, skorun, cihaz dil ayarından türetilen ülke kodu (örn. TR), zaman damgası ve anonim kimlik numaran. Oyuncu adın ve skorun diğer oyunculara herkese açık olarak gösterilir. Lütfen gerçek adını veya kişisel bilgi içeren bir ad kullanma.</p>
+<p>Çevrim içi (dünya) puan tablosu etkinse ve yeni bir rekor kırarsan şu bilgiler Google Firebase Realtime Database üzerinde çalışan sunucumuza gönderilir: oyuncu adın, skorun, cihaz dil ayarından türetilen ülke kodu (örn. TR), zaman damgası ve anonim kimlik numaran. Oyuncu adın ve skorun diğer oyunculara herkese açık olarak gösterilir. Uygunsuz adlar basit bir filtreyle engellenir; başka bir oyuncunun adını bildirirsen anonim kimliğin ve zaman damgan bildirim olarak kaydedilir. Lütfen gerçek adını veya kişisel bilgi içeren bir ad kullanma.</p>
 <h2>Reklamlar</h2>
 <p>Uygulama, Google AdMob reklamları gösterir. AdMob, reklamları sunmak, sınırlamak ve ölçmek için cihazının reklam kimliğini, IP adresini ve cihaz/uygulama bilgilerini kendi sorumluluğunda işleyebilir. Avrupa Ekonomik Alanı ve Birleşik Krallık'ta Google'ın onay mesajı ile izin tercihini sorarız. Reklam kişiselleştirmesini cihaz ayarlarından (Ayarlar > Google > Reklamlar) kapatabilir veya reklam kimliğini sıfırlayabilirsin. Ayrıntılar: Google Gizlilik Politikası.</p>
+<h2>Çökme raporları (isteğe bağlı)</h2>
+<p>Çökme raporlama etkinleştirilmişse Uygulama çöktüğünde cihaz modeli, Android sürümü, uygulama durumu ve bir kurulum kimliği Google Firebase Crashlytics'e gönderilir. Bu veri yalnızca hataları gidermek için kullanılır.</p>
 <h2>Toplamadıklarımız</h2>
 <p>Konum, rehber, kamera, mikrofon, e-posta veya telefon numarası toplamıyoruz. Uygulamada ayrı bir analiz (istatistik) aracı yoktur. Oyuncu verilerin (ad, skor) reklam amacıyla kullanılmaz veya satılmaz.</p>
 <h2>İzinler</h2>
@@ -49,9 +51,11 @@ section{border-top:1px solid var(--line);margin-top:34px;padding-top:6px}
 <h2>Data stored on your device</h2>
 <p>Your best score, your on-device top-10 list, your chosen player name, language and sound settings, and a randomly generated anonymous ID are stored only on your device. You can remove them by uninstalling the App or clearing its data.</p>
 <h2>Online leaderboard</h2>
-<p>When the online (global) leaderboard is enabled and you set a new personal best, the following is sent to our server, which runs on Google Firebase Realtime Database: your player name, your score, a country code derived from your device language setting (for example TR), a timestamp, and your anonymous ID. Your player name and score are visible to other players. Please do not use your real name or any personal information as your player name.</p>
+<p>When the online (global) leaderboard is enabled and you set a new personal best, the following is sent to our server, which runs on Google Firebase Realtime Database: your player name, your score, a country code derived from your device language setting (for example TR), a timestamp, and your anonymous ID. Your player name and score are visible to other players. Inappropriate names are blocked by a basic filter; if you report another player's name, your anonymous ID and a timestamp are stored as the report. Please do not use your real name or any personal information as your player name.</p>
 <h2>Advertising</h2>
 <p>The App shows Google AdMob ads. To serve, limit and measure ads, AdMob may process your device advertising ID, IP address and device/app information under its own responsibility. In the European Economic Area and the UK we ask for your choice through Google's consent message. You can turn off ad personalization in your device settings (Settings > Google > Ads) or reset your advertising ID. See Google's Privacy Policy for details.</p>
+<h2>Crash reports (optional)</h2>
+<p>If crash reporting is enabled, when the App crashes your device model, Android version, app state and an installation ID are sent to Google Firebase Crashlytics. This data is used only to fix bugs.</p>
 <h2>What we do not collect</h2>
 <p>We do not collect location, contacts, camera, microphone, email address or phone number. The App has no separate analytics tool. Your player data (name, score) is not used for advertising or sold.</p>
 <h2>Permissions</h2>

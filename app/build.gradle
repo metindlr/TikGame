@@ -1,4 +1,12 @@
 plugins { id 'com.android.application' }
+
+def runNo = (System.getenv('GITHUB_RUN_NUMBER') ?: '1').toInteger()
+def hasFirebase = file('google-services.json').exists()
+if (hasFirebase) {
+    apply plugin: 'com.google.gms.google-services'
+    apply plugin: 'com.google.firebase.crashlytics'
+}
+
 android {
     namespace 'com.tikkule.game'
     compileSdk 36
@@ -6,8 +14,9 @@ android {
         applicationId "com.tikkule.game"
         minSdk 24
         targetSdk 36
-        versionCode 1
-        versionName "1.0"
+        // Her GitHub derlemesinde otomatik artar (Play Store için gerekli)
+        versionCode runNo
+        versionName "1.0.${runNo}"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -26,7 +35,9 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             if (System.getenv('KEYSTORE_PATH')) { signingConfig signingConfigs.release }
         }
     }
@@ -35,4 +46,10 @@ android {
 dependencies {
     implementation 'com.google.android.gms:play-services-ads:23.6.0'
     implementation 'com.google.android.ump:user-messaging-platform:3.1.0'
+    implementation 'com.google.android.play:review:2.0.2'
+    implementation 'androidx.webkit:webkit:1.12.1'
+    if (hasFirebase) {
+        implementation platform('com.google.firebase:firebase-bom:33.7.0')
+        implementation 'com.google.firebase:firebase-crashlytics'
+    }
 }

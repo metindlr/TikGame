@@ -46,3 +46,11 @@ Actions bitince **tik-kule-build** içinde imzalı `app-release.aab` (Play Store
 4. AdMob > Gizlilik ve mesajlaşma bölümünde **AB kullanıcı onayı (GDPR) mesajını** oluşturup yayınla; yoksa AB'de reklam gelmez.
 5. Reklam sıklığı: Her 3. "Tekrar dene" dokunuşunda tam ekran reklam (`index.html` içindeki `plays%3`).
 6. Bağımlılık sürümleri (play-services-ads 23.6.0, UMP 3.1.0) derlemede bulunamazsa güncel sürümle değiştir.
+
+## 7) Yeni özellikler için notlar
+- **Sürüm numarası:** `versionCode` GitHub derleme numarasından otomatik gelir; her yeni AAB bir öncekinden büyüktür.
+- **Kod küçültme (R8):** Yayın sürümünde açık. Yayından önce `app-release.apk`'yı telefona kurup reklam, puan tablosu ve geri tuşunu mutlaka dene.
+- **Kullanıcı içeriği (oyuncu adları):** Play politikası gereği isim filtresi ve ⚑ bildirme düğmesi uygulamada var. Bildirimleri Firebase > Data > reports altında düzenli kontrol et.
+- **Uygulama içi puanlama:** Rekor 15 ve üstü olunca, en fazla bir kez Google'ın puanlama penceresi açılır (test sürümlerinde görünmeyebilir).
+- **Data safety:** Crashlytics eklersen "Crash logs" ve "Diagnostics" verisini, kullanıcı kimliği olarak da "Kurulum kimliği"ni beyan et.
+- **WebView adresi:** Oyun artık güvenli `https://appassets.androidplatform.net` adresinden açılıyor. Önceki test kurulumlarında kayıtlı rekor ve jeton sıfırlanır.

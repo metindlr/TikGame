@@ -1,1 +1,11 @@
+buildscript {
+    repositories { google(); mavenCentral() }
+    dependencies {
+        // Crashlytics yalnızca app/google-services.json eklenirse devreye girer (isteğe bağlı).
+        if (rootProject.file('app/google-services.json').exists()) {
+            classpath 'com.google.gms:google-services:4.4.2'
+            classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.2'
+        }
+    }
+}
 plugins { id 'com.android.application' version '8.9.1' apply false }
