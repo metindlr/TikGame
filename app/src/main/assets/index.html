@@ -64,7 +64,7 @@ li .rk{width:26px;opacity:.7;font-weight:800}li .nmv{flex:1;overflow:hidden;text
 <button class="ib" id="dyB" aria-label="Daily">📅</button>
 <button class="ib" id="thB" aria-label="Themes">🎨</button>
 <button class="ib" id="mute" aria-label="Sound">🔊</button>
-<div id="menu"><h1>TIK <span>KULE</span></h1><p id="bestMenu"></p><p id="coinMenu"></p><button class="alt" id="nickB" style="pointer-events:auto"></button><br><button class="alt" id="privB" data-i="pv" style="display:none;pointer-events:auto"></button><div class="hint" data-i="h"></div></div>
+<div id="menu"><h1>TIK <span>KULE</span></h1><p id="bestMenu"></p><p id="coinMenu"></p><button class="alt" id="nickB" style="pointer-events:auto"></button><div class="hint" data-i="h"></div></div>
 <div class="ov" id="over"><div class="box"><h2 id="ovTitle"></h2><div class="big" id="ovScore">0</div><p id="res"></p><p class="m" id="rank"></p><button id="rewB" style="display:none;background:#f59e0b;margin-bottom:10px" data-i="rw"></button><br><button id="again" data-i="a"></button><br><button class="alt" id="lbB2" data-i="bd"></button><br><button class="alt" id="homeB" data-i="ho"></button><br><button class="alt" id="share" data-i="s" style="display:none"></button><br><button class="alt" id="exitB" data-i="ex" style="display:none"></button></div></div>
 <div class="ov" id="lb"><div class="box"><h2 data-i="bd"></h2><input id="nm" maxlength="14"><div class="tabs"><button id="tG" data-i="g"></button><button id="tL" data-i="l"></button></div><div id="list"></div><button class="alt" id="lbX" data-i="cl"></button></div></div>
 <div class="ov" id="lg"><div class="box"><h2>🌐</h2><div class="langs" id="langs"></div><button class="alt" id="lgX" data-i="cl"></button></div></div>
@@ -475,7 +475,6 @@ window.__back=function(){
   if(Date.now()-backAt<2000)return false;
   backAt=Date.now();toast(t('bk'));return true;
 };
-if(window.AndroidAds){$('privB').style.display='inline-block';$('privB').onclick=()=>{location.href='privacy.html'}}
 $('nkS').onclick=()=>{const r=saveName($('nkIn').value);if(r===true)$('nk').style.display='none';else $('nkErr').textContent=t(r==='bad'?'nb':'ne')};
 $('nkIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('nkS').click()});
 loginCheck();
