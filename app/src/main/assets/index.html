@@ -136,8 +136,9 @@ pt:['Pausado – toque para continuar','Configurações','Som','Vibração','Red
 ru:['Пауза – нажми, чтобы продолжить','Настройки','Звук','Вибрация','Меньше движения','Режим для дальтоников','Достижения','Сыграй {n} игр','Серия {n} дн.! +{c} монет'],
 ar:['متوقف مؤقتًا – المس للمتابعة','الإعدادات','الصوت','الاهتزاز','تقليل الحركة','وضع عمى الألوان','الإنجازات','العب {n} مباراة','سلسلة {n} أيام! +{c} عملة'],
 ja:['一時停止中 – タップで再開','設定','サウンド','バイブレーション','動きを減らす','色覚サポート','実績','{n}回プレイ','{n}日連続！ +{c}コイン']};
-Object.keys(LANGS).forEach(k=>LANGS[k]=LANGS[k].concat(X[k],[EX[k]],X2[k],X3[k],X4[k]));
-const K=['name','h','b','p','o','r','a','s','bd','g','l','nm','em','of','ld','cl','st','dm','th','m1','m2','m3','sel','nc','rs','ex','ho','nn','sv','ne','nb','bk','pv','rw','na','rk','rp','rd','ps','se','so','vi','rm','cb','ah','g1','dl'];
+const X5={en:'This name is already taken',tr:'Bu isim zaten kullanılıyor',es:'Este nombre ya está en uso',de:'Dieser Name ist bereits vergeben',fr:'Ce nom est déjà pris',pt:'Este nome já está em uso',ru:'Это имя уже занято',ar:'هذا الاسم مستخدم بالفعل',ja:'この名前はすでに使われています'};
+Object.keys(LANGS).forEach(k=>LANGS[k]=LANGS[k].concat(X[k],[EX[k]],X2[k],X3[k],X4[k],[X5[k]]));
+const K=['name','h','b','p','o','r','a','s','bd','g','l','nm','em','of','ld','cl','st','dm','th','m1','m2','m3','sel','nc','rs','ex','ho','nn','sv','ne','nb','bk','pv','rw','na','rk','rp','rd','ps','se','so','vi','rm','cb','ah','g1','dl','nt'];
 let lang=store.get('tk-lang');
 if(!LANGS[lang]){const p=(navigator.language||'en').slice(0,2).toLowerCase();lang=LANGS[p]?p:'en'}
 const t=k=>LANGS[lang][K.indexOf(k)];
@@ -150,6 +151,8 @@ function refreshBest(){$('bestMenu').textContent=best?t('b')+': '+best:'';$('coi
 
 /* ===== Kimlik, bölge, puan tablosu ===== */
 let uid=store.get('tk-uid');if(!uid){uid=Math.random().toString(36).slice(2,12);store.set('tk-uid',uid)}
+let secret=store.get('tk-sec');
+if(!secret){try{secret=Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('')}catch(e){secret=Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)+Date.now().toString(36)}store.set('tk-sec',secret)}
 const hadName=!!store.get('tk-name');
 let pname=store.get('tk-name')||('Player'+(1000+Math.floor(Math.random()*9000)));
 const region=((navigator.language||'').split('-')[1]||'').toUpperCase();
@@ -161,12 +164,33 @@ function bad(n){
   if(SUBW.some(w=>flat.includes(w)))return true;
   return l.split(/[^\p{L}\p{N}]+/u).some(x=>TOKW.includes(x));
 }
+const nkey=n=>String(n).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i').replace(/[^\p{L}\p{N}]/gu,'').slice(0,40);
+async function reserve(k){
+  try{
+    const r=await fetch(BOARD_URL+'/names/'+encodeURIComponent(k)+'.json',{method:'PUT',body:JSON.stringify({h:secret,u:uid,t:Date.now()})});
+    if(r.ok)return 'ok';
+    if(r.status===401||r.status===403)return 'taken';
+    return 'net';
+  }catch(e){return 'net'}
+}
+function release(k){
+  if(!BOARD_URL||!k)return;
+  try{fetch(BOARD_URL+'/names/'+encodeURIComponent(k)+'.json',{method:'PUT',body:JSON.stringify({h:secret,u:'',t:Date.now(),free:true})})}catch(e){}
+}
+async function syncName(){
+  if(!BOARD_URL||!hadName)return;
+  const k=nkey(pname),now=Date.now();
+  if(store.get('tk-nkey')===k&&now-(+store.get('tk-nts')||0)<2592e6)return;
+  const r=await reserve(k);
+  if(r==='ok'){store.set('tk-nkey',k);store.set('tk-nts',String(now))}
+  else if(r==='taken'){openNick();$('nkErr').textContent=t('nt')}
+}
 const flag=c=>/^[A-Z]{2}$/.test(c)?String.fromCodePoint(...[...c].map(x=>127397+x.charCodeAt(0))):'🌍';
 const localGet=()=>{try{return JSON.parse(store.get('tk-local'))||[]}catch(e){return[]}};
 function localAdd(s){const a=localGet().filter(x=>x.r!==runId);a.push({n:pname,s,c:region,t:Date.now(),r:runId});a.sort((x,y)=>y.s-x.s);store.set('tk-local',JSON.stringify(a.slice(0,10)))}
 async function globalSubmit(s){
-  if(!BOARD_URL)return;
-  try{await fetch(BOARD_URL+'/scores/'+uid+'.json',{method:'PUT',body:JSON.stringify({n:pname.slice(0,14),s,c:region,t:Date.now()})})}catch(e){}
+  if(!BOARD_URL)return false;
+  try{const r=await fetch(BOARD_URL+'/scores/'+uid+'.json',{method:'PUT',body:JSON.stringify({n:pname.slice(0,14),s,c:region,t:Date.now()})});return r.ok}catch(e){return false}
 }
 async function globalGet(){
   const r=await fetch(BOARD_URL+'/scores.json?orderBy="s"&limitToLast=30');
@@ -200,8 +224,16 @@ async function renderBoard(){
 function openBoard(){$('nm').value=pname;$('lb').style.display='flex';renderBoard()}
 $('tG').onclick=()=>{tab='global';renderBoard()};
 $('tL').onclick=()=>{tab='local';renderBoard()};
-function saveName(v){v=(v||'').trim().slice(0,14);if(v.length<2)return 'short';if(bad(v))return 'bad';pname=v;store.set('tk-name',v);$('nm').value=v;refreshBest();if(best>0)globalSubmit(best);return true}
-$('nm').addEventListener('change',e=>{const r=saveName(e.target.value);if(r!==true){e.target.value=pname;if(r==='bad')toast(t('nb'))}});
+async function saveName(v){
+  v=(v||'').trim().slice(0,14);if(v.length<2)return 'short';if(bad(v))return 'bad';
+  const k=nkey(v);if(k.length<2)return 'short';
+  if(BOARD_URL&&k!==store.get('tk-nkey')){
+    const r=await reserve(k);
+    if(r==='taken')return 'taken';
+    if(r==='ok'){const old=store.get('tk-nkey');store.set('tk-nkey',k);store.set('tk-nts',String(Date.now()));if(old&&old!==k)release(old)}
+  }
+  pname=v;store.set('tk-name',v);$('nm').value=v;store.set('tk-local',JSON.stringify(localGet().map(x=>Object.assign({},x,{n:v}))));refreshBest();if(best>0&&BOARD_URL)globalSubmit(best).then(ok=>{toast(ok?'✓ '+v:t('of'));if(ok&&$('lb').style.display==='flex')renderBoard()});return true}
+$('nm').addEventListener('change',async e=>{const r=await saveName(e.target.value);if(r!==true){e.target.value=pname;if(r==='bad')toast(t('nb'));else if(r==='taken')toast(t('nt'))}});
 $('lbB').onclick=openBoard;$('lbB2').onclick=openBoard;$('lbX').onclick=()=>$('lb').style.display='none';
 
 /* ===== Dil seçici ===== */
@@ -475,10 +507,11 @@ window.__back=function(){
   if(Date.now()-backAt<2000)return false;
   backAt=Date.now();toast(t('bk'));return true;
 };
-$('nkS').onclick=()=>{const r=saveName($('nkIn').value);if(r===true)$('nk').style.display='none';else $('nkErr').textContent=t(r==='bad'?'nb':'ne')};
+$('nkS').onclick=async()=>{$('nkS').disabled=true;const r=await saveName($('nkIn').value);$('nkS').disabled=false;if(r===true)$('nk').style.display='none';else $('nkErr').textContent=t(r==='bad'?'nb':r==='taken'?'nt':'ne')};
 $('nkIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('nkS').click()});
 loginCheck();
 if(best>0&&BOARD_URL)setTimeout(()=>globalSubmit(best),2500);
+if(BOARD_URL)setTimeout(syncName,1500);
 reset();booted=true;applyLang();if(!hadName)openNick();requestAnimationFrame(frame);
 </script>
 </body>
